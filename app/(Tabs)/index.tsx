@@ -59,6 +59,46 @@ export default function App() {
       </View>
 
 
+        <View className="mb-5">
+        <ListHeading title="All Subscriptions" />
+
+        <FlatList
+          data={upcomingSubscriptions}
+          renderItem={({ item }) => (<UpcomingSubscriptionCard daysLeft={0} {...item} />)}
+          keyExtractor={(item) => item.id}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          ListEmptyComponent={<Text className="home-empty-state">No upcoming renewals yet.</Text>}
+        />
+      </View>
+
+        <View className="mb-5">
+        <ListHeading title="All Subscriptions" />
+
+        <FlatList
+          data={upcomingSubscriptions}
+          renderItem={({ item }) => (<UpcomingSubscriptionCard daysLeft={0} {...item} />)}
+          keyExtractor={(item) => item.id}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          ListEmptyComponent={<Text className="home-empty-state">No upcoming renewals yet.</Text>}
+        />
+      </View>
+
+
+        <View className="mb-5">
+        <ListHeading title="All Subscriptions" />
+
+        <FlatList
+          data={upcomingSubscriptions}
+          renderItem={({ item }) => (<UpcomingSubscriptionCard daysLeft={0} {...item} />)}
+          keyExtractor={(item) => item.id}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          ListEmptyComponent={<Text className="home-empty-state">No upcoming renewals yet.</Text>}
+        />
+      </View>
+
 
 
     </SafeAreaView >
