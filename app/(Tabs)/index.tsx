@@ -1,22 +1,66 @@
 import "@/global.css"
-import { Link } from "expo-router";
-import { Text, View } from "react-native";
-import {SafeAreaView as RNSafeAreaView} from "react-native-safe-area-context";
+import { FlatList, Text, View } from "react-native";
+import { SafeAreaView as RNSafeAreaView } from "react-native-safe-area-context";
 import { styled } from "nativewind";
+import { HOME_USER } from "@/constants/data";
+import ListHeading from "../components/ListHeading";
+import UpcomingSubscriptionCard from "../components/UpcomingSubscriptionCard";
+import dayjs from "dayjs";
+import { useMemo } from "react";
+import { useSubscriptionStore } from "@/lib/subscriptionStore";
 
 const SafeAreaView = styled(RNSafeAreaView);
 
 export default function App() {
 
+  const { subscriptions, addSubscription } = useSubscriptionStore();
+
+  // Get upcoming subscriptions (active subscriptions with renewal date within next 7 days)
+  const upcomingSubscriptions = useMemo(() => {
+    const now = dayjs();
+    const nextWeek = now.add(7, 'days');
+    return subscriptions.filter(sub =>
+      sub.status === 'active' &&
+      dayjs(sub.renewalDate).isAfter(now) &&
+      dayjs(sub.renewalDate).isBefore(nextWeek)
+    ).sort((a, b) => dayjs(a.renewalDate).diff(dayjs(b.renewalDate)));
+  }, [subscriptions]);
+
   return (
-    <SafeAreaView  className="flex-1 bg-background items-center justify-center bg-white">
+    <SafeAreaView className="">
       <Text className="text-xl font-bold text-blue-500">
-        Welcome to Nativewind!ss
-      </Text> 
+        Welcome {HOME_USER.name}
+      </Text>
 
-      <Text>sd</Text>
+      <View className="mb-5">
+        <ListHeading title="Upcoming" />
 
-      <Link href={'/(Tabs)/subscriptions/Spotify'}>go to Subscription/route?</Link>
+        <FlatList
+          data={upcomingSubscriptions}
+          renderItem={({ item }) => (<UpcomingSubscriptionCard daysLeft={0} {...item} />)}
+          keyExtractor={(item) => item.id}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          ListEmptyComponent={<Text className="home-empty-state">No upcoming renewals yet.</Text>}
+        />
+      </View>
+
+      <View className="mb-5">
+        <ListHeading title="All Subscriptions" />
+
+        <FlatList
+          data={upcomingSubscriptions}
+          renderItem={({ item }) => (<UpcomingSubscriptionCard daysLeft={0} {...item} />)}
+          keyExtractor={(item) => item.id}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          ListEmptyComponent={<Text className="home-empty-state">No upcoming renewals yet.</Text>}
+        />
+      </View>
+
+
+
+
     </SafeAreaView >
   );
 }
